@@ -1,0 +1,11 @@
+CREATE PROCEDURE orderingEmails()
+BEGIN
+	SELECT id, email_title, 
+	CASE
+		WHEN size< POW(2,10) THEN "0 Kb"
+		WHEN size>=POW(2,20) THEN CONCAT(FLOOR(size/POW(2,20)), " Mb")
+		WHEN size>=POW(2,10) THEN CONCAT(FLOOR(size/POW(2,10)), " Kb")
+	END as short_size
+	FROM emails
+	ORDER BY size DESC;
+END

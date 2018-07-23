@@ -1,0 +1,20 @@
+CREATE PROCEDURE soccerGameSeries()
+BEGIN
+	SELECT
+	CASE
+		WHEN wins > 0 THEN 1
+		WHEN wins < 0 THEN 2
+		WHEN goals > 0 THEN 1
+		WHEN goals < 0 THEN 2
+		WHEN field < 0 THEN 2
+		ELSE 0
+	END AS winner
+	FROM
+	(
+		SELECT 
+		SUM(IF(first_team_score > second_team_score, 1, -1)) AS wins,
+		SUM(first_team_score - second_team_score) AS goals, 
+		SUM(IF(match_host = 2, first_team_score, -second_team_score)) AS field
+		FROM scores
+	) s;
+END
