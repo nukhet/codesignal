@@ -1,0 +1,10 @@
+CREATE PROCEDURE placesOfInterestPairs()
+BEGIN
+	SELECT s1.name AS place1, s2.name AS place2
+	FROM sights AS s1
+	JOIN sights AS s2 ON s1.name<s2.name AND s1.name!=s2.name AND
+	ST_Distance(
+		GeomFromText(CONCAT('POINT (', s1.x, ' ', s1.y, ')')),
+		GeomFromText(CONCAT('POINT (', s2.x, ' ', s2.y, ')'))) < 5.0
+	GROUP BY s1.name, s2.name;
+END

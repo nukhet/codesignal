@@ -1,0 +1,8 @@
+CREATE PROCEDURE consecutiveIds()
+BEGIN
+	SET @rank=0;
+	SELECT id AS oldId, @rank:=@rank+1 AS newId
+	FROM itemIds
+	GROUP BY oldId
+	ORDER BY newId ASC;
+END

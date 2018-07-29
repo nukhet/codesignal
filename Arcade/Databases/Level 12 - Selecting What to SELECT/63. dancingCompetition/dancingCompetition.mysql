@@ -1,0 +1,21 @@
+CREATE PROCEDURE dancingCompetition()
+BEGIN
+SET @mx1 = (SELECT MAX(first_criterion) FROM scores);
+SET @mx2 = (SELECT MAX(second_criterion) FROM scores);
+SET @mx3 = (SELECT MAX(third_criterion) FROM scores);
+SET @mn1 = (SELECT MIN(first_criterion) FROM scores);
+SET @mn2 = (SELECT MIN(second_criterion) FROM scores);
+SET @mn3 = (SELECT MIN(third_criterion) FROM scores);
+
+SELECT * FROM scores
+WHERE arbiter_id IN
+(
+    SELECT arbiter_id FROM scores
+    HAVING IF(first_criterion=@mx1,1,0)+
+           IF(second_criterion=@mx2,1,0)+
+           IF(third_criterion=@mx3,1,0)+
+           IF(first_criterion=@mn1,1,0)+
+           IF(second_criterion=@mn2,1,0)+
+           IF(third_criterion=@mn3,1,0)<2
+);
+END

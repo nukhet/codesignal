@@ -1,0 +1,6 @@
+CREATE PROCEDURE companyEmployees()
+BEGIN
+	SELECT d.dep_name, e.emp_name
+	FROM departments AS d, employees AS e 
+	ORDER BY d.dep_name, e.emp_name;
+END
