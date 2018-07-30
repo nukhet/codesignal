@@ -1,0 +1,32 @@
+CREATE PROCEDURE giftPackaging()
+BEGIN
+    SELECT package_type, COUNT(package_type) AS number
+    FROM (
+    SELECT pck.id, MIN(length*width*height) as vol
+    FROM (SELECT g.id, p.* 
+          FROM gifts g
+          JOIN packages p
+          ON g.length <= p.length AND g.width <= p.width and g.height <= p.height
+    )pck
+    GROUP BY pck.id) vols, packages
+    WHERE vols.vol=packages.length*packages.width*packages.height
+    GROUP BY package_type;
+END
+
+/*A Better Solution by cninja*/
+/*
+CREATE PROCEDURE giftPackaging()
+BEGIN
+	SELECT (SELECT p.package_type
+            FROM packages p
+            WHERE p.length >= g.length 
+            AND p.width >= g.width
+            AND p.height >= g.height
+            ORDER BY p.length * p.width * p.height 
+            LIMIT 1) AS package_type
+        ,COUNT(1) AS number
+    FROM gifts g
+    GROUP BY package_type
+    ORDER BY package_type;
+END
+*/
